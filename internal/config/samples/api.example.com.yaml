@@ -1,0 +1,17 @@
+server: "api.example.com"
+routes:
+  - path: "/hello"
+    upstreams:
+      name: "hello"
+      lb-strategy: "round-robin"
+      servers: ["http://localhost:8091"]
+  - path: "/api/users"
+    upstreams:
+      name: "users"
+      lb-strategy: "round-robin"
+      servers: ["localhost:300"]
+  - path: "/api/usage"
+    upstreams:
+      name: "usage"
+      lb-strategy: "least-connections"
+      servers: ["localhost:6000", "localhost:6001", "localhost:6002"]
