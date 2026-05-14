@@ -1,0 +1,10 @@
+log:
+  format: json
+  dir:
+    error: '/Users/pratikkumar/Desktop/dumps/pk-proxy/logs'
+    access: '/Users/pratikkumar/Desktop/dumps/pk-proxy/logs'
+timeouts:
+  client_read: 30s
+  client_write: 30s
+  upstream_connect: 5s
+  upstream_read: 30s

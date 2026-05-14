@@ -16,6 +16,28 @@ type ServerConfig struct {
 	Routes []*Route `yaml:"routes" json:"routes"`
 }
 
+type ProxyLogDirConfig struct {
+	Error  string `yaml:"error" json:"error"`
+	Access string `yaml:"access" json:"access"`
+}
+
+type ProxyLogConfig struct {
+	Format string            `yaml:"format" json:"format"`
+	Dir    ProxyLogDirConfig `yaml:"dir" json:"dir"`
+}
+
+type ProxyTimeoutConfig struct {
+	ClientRead      string `yaml:"client_read" json:"client_read"`
+	ClientWrite     string `yaml:"client_write" json:"client_write"`
+	UpstreamConnect string `yaml:"upstream_connect" json:"upstream_connect"`
+	UpstreamRead    string `yaml:"upstream_read" json:"upstream_read"`
+}
+
+type ProxyConfig struct {
+	Log     ProxyLogConfig     `yaml:"log" json:"log"`
+	Timeout ProxyTimeoutConfig `yaml:"timeout" json:"timeout"`
+}
+
 type Server struct {
 	Name   string
 	Routes []*Route

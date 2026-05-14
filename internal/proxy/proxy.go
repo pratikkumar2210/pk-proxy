@@ -4,19 +4,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"time"
 
 	"github.com/pratikkumar2201/pk-proxy/internal/tree"
 	"github.com/pratikkumar2201/pk-proxy/models"
+	"github.com/pratikkumar2201/pk-proxy/pkg/logger"
+	"github.com/pratikkumar2201/pk-proxy/util"
 )
 
 type Server struct {
 	Routes []*models.Route
 	Tree   *tree.RadixTree
+	Logger *logger.Logger
 }
 
 type Proxy struct {
+	Config  *models.ProxyConfig
 	Servers map[string]*Server
 	client  *http.Client
 }
@@ -87,7 +92,6 @@ func (px *Proxy) handleRequest(w http.ResponseWriter, r *http.Request) {
 
 	// find the longest matching route in tree -> tree node, which has value as upstream of that route
 	routeNode := server.matchRoute(r.URL.Path)
-	fmt.Println(routeNode.Value.Servers, "<<<<routeNoderouteNode")
 	if routeNode == nil {
 		writeError(w, http.StatusNotFound, "route not registered")
 		return
@@ -108,5 +112,7 @@ func (px *Proxy) handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer res.Body.Close()
+	start := time.Now()
+	server.Logger.Info(res.Status, slog.String("method", r.Method), slog.String("target", util.RequestURI(r)), slog.String("remote-addr", r.RemoteAddr), slog.Any("took", time.Since(start)))
 	copyResponse(w, res)
 }

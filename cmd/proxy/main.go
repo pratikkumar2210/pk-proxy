@@ -10,11 +10,24 @@ import (
 	"github.com/pratikkumar2201/pk-proxy/internal/proxy"
 )
 
+// func createDirectoryIfNotExists(path string) error {
+// 	if _, err := os.Stat(path); os.IsNotExist(err) {
+// 		return os.Mkdir(path, 0755)
+// 	}
+// 	return nil
+// }
+
+// func createLogDir() {
+// 	createDirectoryIfNotExists("/Users/pratikkumar/Desktop/dumps/pk-proxy/logs")
+// }
+
 func main() {
+	// createLogDir()
+
 	store := proxy.NewProxy()
 
 	loader := config.NewLoader(store)
-	if err := loader.LoadConfigs(); err != nil {
+	if err := loader.Load(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -24,7 +37,7 @@ func main() {
 	go func() {
 		defer wg.Done()
 		http.Handle("/", store)
-		err := http.ListenAndServe(":80", middleware.Chain(store, middleware.WithSecurityHeaders, middleware.WithLogger))
+		err := http.ListenAndServe(":80", middleware.Chain(store, middleware.WithSecurityHeaders))
 		if err != nil {
 			log.Fatal(err)
 		}

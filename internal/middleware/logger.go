@@ -1,12 +1,9 @@
 package middleware
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/pratikkumar2201/pk-proxy/util"
 )
 
 func WithLogger(next http.Handler) http.Handler {
@@ -20,7 +17,6 @@ func WithLogger(next http.Handler) http.Handler {
 			time.Since(start),
 		)
 		next.ServeHTTP(w, r)
-		fmt.Printf("Served Request %s \n", util.RequestURI(r))
 		log.Printf(
 			"%s %s %s %s",
 			r.Method,

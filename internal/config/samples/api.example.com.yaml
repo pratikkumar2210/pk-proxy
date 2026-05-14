@@ -5,6 +5,11 @@ routes:
       name: "hello"
       lb-strategy: "round-robin"
       servers: ["http://localhost:8091"]
+  - path: "/headers"
+    upstreams:
+      name: "hello"
+      lb-strategy: "round-robin"
+      servers: ["http://localhost:8091"]
   - path: "/api/users"
     upstreams:
       name: "users"
